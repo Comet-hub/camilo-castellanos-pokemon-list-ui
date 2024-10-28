@@ -18,3 +18,4 @@ coverage*
 
 cells.log
 __deps__.json
+package-lock.json

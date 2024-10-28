@@ -24,6 +24,7 @@
     "@bbva-web-components/bbva-foundations-spinner": "^1.0.14",
     "@bbva-web-components/bbva-foundations-styles": "^2.0.0",
     "@bbva-web-components/bbva-help-modal": "^5.4.1",
+    "@pokedex/pokemon-list-dm": "git+https://github.com/Comet-hub/camilo-castellanos-pokemon-list-dm.git#main",
     "lit-element": "^2.0.0",
     "lit-html": "^1.0.0"
   },
