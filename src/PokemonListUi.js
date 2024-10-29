@@ -16,11 +16,15 @@ export class PokemonListUi extends LitElement {
       isLoading: {
         type: Boolean,
       },
+      page: {
+        type: String,
+      },
     };
   }
 
   constructor() {
     super();
+    this.page = 'https://pokeapi.co/api/v2/pokemon';
     this.isLoading = false;
     this.pokemonList = [];
   }
@@ -45,7 +49,9 @@ export class PokemonListUi extends LitElement {
 
   render() {
     return html`
-      <bbva-core-heading level="1">Pokemon List</bbva-core-heading>
+      <bbva-core-heading level="2"
+        ><slot name="list-title"></slot
+      ></bbva-core-heading>
 
       <div class="content-container">
         <div class="list">${this._gridTpl}</div>
@@ -53,21 +59,18 @@ export class PokemonListUi extends LitElement {
           ? html`<bbva-foundations-spinner with-mask>
             </bbva-foundations-spinner>`
           : html`<bbva-button-default @click=${(e) => this.loadMorePokemons()}>
-              Load more pokémos
+              <slot name="load-button-text"></slot>
             </bbva-button-default>`}
       </div>
       <dialog class="modal">
         <div class="modal-container">
-          <p>This pokemon has no evolutions</p>
-          <bbva-button-default
-            text="Close"
-            @click=${() => this.modal.close()}
+          <slot name="modal-text"></slot>
+          <bbva-button-default @click=${() => this.modal.close()}
+            ><slot name="close-button-text"></slot
           ></bbva-button-default>
         </div>
       </dialog>
-      <pokemon-list-dm
-        page="https://pokeapi.co/api/v2/pokemon"
-      ></pokemon-list-dm>
+      <pokemon-list-dm page="${this.page}"></pokemon-list-dm>
       <slot></slot>
     `;
   }
@@ -110,6 +113,13 @@ export class PokemonListUi extends LitElement {
   }
   checkEvolution(pokemon) {
     if (pokemon.evolution.chain.evolves_to.length) {
+      this.dispatchEvent(
+        new CustomEvent('evolves', {
+          bubbles: true,
+          composed: true,
+          detail: pokemon,
+        }),
+      );
     } else {
       this.modal.showModal();
     }
